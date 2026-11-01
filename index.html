@@ -1,18 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SuperSafe Partyband | Official</title>
+    <meta name="description" content="SuperSafe is een party- en coverband. Jouw feest verdient de veiligste beats van de stad.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --yellow: #ffb829;
+            --yellow-light: #ffd56b;
+            --ink: #1a1330;
+            --night: #0d0a24;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             min-height: 100vh;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
             color: #ffffff;
             background: linear-gradient(135deg,
                 #007daf 0%,
@@ -23,7 +36,9 @@
                 #e09575 75%,
                 #ffb829 100%
             );
+            background-color: #8075c7;
             background-size: 400% 400%;
+            background-attachment: fixed;
             animation: gradientShift 12s ease infinite;
         }
 
@@ -33,85 +48,587 @@
             100% { background-position: 0% 50%; }
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.1);
+        a { color: #ffffff; }
+        a:hover { color: var(--yellow-light); }
+
+        .display {
+            font-family: 'Bungee', sans-serif;
+            font-weight: 400;
+        }
+
+        .glass {
+            background: rgba(16, 12, 48, 0.52);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            padding: 40px;
-            width: 85%;
-            max-width: 800px;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            font: inherit;
+            font-weight: 700;
+            border-radius: 999px;
+            transition: transform .25s ease, background .25s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover { transform: scale(1.03); }
+
+        .btn-yellow { background: var(--yellow); color: var(--ink); border: 0; }
+        .btn-yellow:hover { color: var(--ink); }
+        .btn-white { background: #ffffff; color: var(--ink); }
+        .btn-white:hover { color: var(--ink); }
+        .btn-lg { font-size: 16px; padding: 16px 28px; }
+
+        .eyebrow {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--yellow-light);
+        }
+
+        .lead {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            padding: 16px 16px 0;
+        }
+
+        nav {
+            border-radius: 999px;
+            padding: 10px 12px 10px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .nav-brand {
+            font-size: 18px;
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-links a:not(.btn) {
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 14px;
+        }
+
+        .nav-links .btn { padding: 12px 22px; }
+
+        /* Hero + showreel */
+        #top {
+            padding: 56px 16px 96px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+            scroll-margin-top: 100px;
         }
 
         .logo {
             width: 100%;
+            max-width: 560px;
             height: auto;
-            margin: 0 auto 20px;
-            display: block;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
         }
 
-        p {
-            font-size: 1rem;
+        .tagline {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 500;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+        }
+
+        .showreel {
+            width: 100%;
+            max-width: 1100px;
+            border-radius: 28px;
+            padding: 12px;
+            box-sizing: border-box;
+            scroll-margin-top: 100px;
+        }
+
+        .showreel-frame {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--night);
+        }
+
+        .showreel-frame img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+            opacity: 0.55;
+        }
+
+        .showreel-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 16px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(13, 10, 36, 0) 40%, rgba(13, 10, 36, 0.75) 100%);
+        }
+
+        .play {
+            width: 104px;
+            height: 104px;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .showreel-title {
+            font-size: 28px;
+            letter-spacing: 0.04em;
+        }
+
+        .showreel-note {
+            font-size: 14px;
             opacity: 0.85;
-            margin: 0 0 30px;
         }
 
-        .links {
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        /* The band */
+        #band {
+            padding: 96px 16px;
+            scroll-margin-top: 60px;
+        }
+
+        .band-card {
+            border-radius: 32px;
+            padding: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .band-photo {
+            flex: 1 1 380px;
+            min-width: 0;
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 22px;
+        }
+
+        .band-text {
+            flex: 1 1 420px;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding: 8px 16px 8px 0;
+        }
+
+        h2 {
+            margin: 0;
+            line-height: 1.05;
+            font-size: 48px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-weight: 500;
+        }
+
+        .tag-yellow { background: rgba(255, 184, 41, 0.18); border: 1px solid rgba(255, 184, 41, 0.6); }
+        .tag-blue { background: rgba(0, 125, 175, 0.25); border: 1px solid rgba(110, 200, 240, 0.6); }
+        .tag-pink { background: rgba(199, 113, 212, 0.22); border: 1px solid rgba(230, 160, 240, 0.6); }
+        .tag-white { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.4); }
+
+        /* Contact */
+        #contact {
+            padding: 96px 16px 120px;
+            scroll-margin-top: 60px;
+        }
+
+        .contact-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            align-items: stretch;
+        }
+
+        .contact-card {
+            flex: 1 1 340px;
+            min-width: 0;
+            border-radius: 32px;
+            padding: 40px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .contact-card h2 { font-size: 44px; }
+
+        .link-tile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            padding: 14px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            font-weight: 500;
+            min-height: 48px;
+            box-sizing: border-box;
+            overflow-wrap: anywhere;
+            transition: background .25s ease;
+        }
+
+        .link-tile:hover { background: rgba(255, 255, 255, 0.18); }
+
+        .socials-block {
+            margin-top: auto;
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
-        .btn {
-            text-decoration: none;
-            color: white;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 14px;
-            border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            font-weight: 600;
-            font-size: 0.9rem;
+        .socials-label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        .socials {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
-        .contact-info {
-            margin-top: 35px;
-            font-size: 0.8rem;
-            opacity: 0.6;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 20px;
+        .socials .link-tile {
+            flex: 1 1 150px;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            font-weight: 700;
+        }
+
+        .socials .link-tile:hover { background: rgba(255, 255, 255, 0.18); }
+
+        form {
+            flex: 1.4 1 460px;
+            min-width: 0;
+            border-radius: 32px;
+            padding: 40px;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field-wide,
+        .form-footer { grid-column: span 2; }
+
+        .field label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            font: inherit;
+            font-size: 16px;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 12px;
+            padding: 14px 16px;
+            min-height: 48px;
+            box-sizing: border-box;
+            width: 100%;
+            color-scheme: dark;
+        }
+
+        .field input::placeholder,
+        .field textarea::placeholder { color: rgba(255, 255, 255, 0.62); }
+
+        .field select option { color: #141225; }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            outline: 2px solid var(--yellow);
+            outline-offset: 2px;
+        }
+
+        .form-footer {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .form-footer span {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        .form-footer .btn {
+            font-size: 17px;
+            padding: 16px 32px;
+            min-height: 52px;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            padding: 0 16px 32px;
+        }
+
+        .footer-bar {
+            border-radius: 24px;
+            padding: 20px 28px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .footer-bar .display { font-size: 16px; }
+        .footer-bar span:last-child { font-size: 14px; opacity: 0.85; }
+
+        @media (max-width: 640px) {
+            nav { border-radius: 28px; padding-left: 20px; }
+            h2 { font-size: 36px; }
+            .contact-card h2 { font-size: 34px; }
+            .contact-card, form { padding: 24px; border-radius: 24px; }
+            form { grid-template-columns: minmax(0, 1fr); }
+            .field-wide, .form-footer { grid-column: auto; }
+            .band-text { padding: 0 8px 8px; }
+            .play { width: 72px; height: 72px; }
+            .play svg { width: 28px; height: 28px; }
+            .showreel-title { font-size: 20px; }
+            .showreel-note { display: none; }
+            #band, #contact { padding-top: 48px; padding-bottom: 48px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            body { animation: none; }
+            .btn, .link-tile { transition: none; }
+            .btn:hover { transform: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="glass-card">
-        <img src="logo_with_text.png" alt="SuperSafe Partyband" class="logo">
-        <p>Your party deserves the safest beats in town</p>
+    <header>
+        <nav class="glass container">
+            <a href="#top" class="nav-brand display">SuperSafe</a>
+            <div class="nav-links">
+                <a href="#showreel">Showreel</a>
+                <a href="#band">De band</a>
+                <a href="#contact" class="btn btn-yellow">Boek ons</a>
+            </div>
+        </nav>
+    </header>
 
-        <div class="links">
-            <a href="" class="btn">Upcoming gigs --<i>Coming Soon</i>-- </a>
-            <a href="https://www.instagram.com/supersafepartyband/" class="btn">Get the glam on Instagram</a>
-            <a href="https://www.facebook.com/SuperSafePartyBand" class="btn">Come get Funky on Facebook</a>
-            <a href="mailto:booking@supersafepartyband.be" class="btn">Drop us a Beat at booking@supersafepartyband.be</a>
-        </div>
+    <main>
+        <section id="top">
+            <img src="logo_with_text.png" alt="SuperSafe Partyband" class="logo">
+            <p class="tagline">Jouw feest verdient de veiligste beats van de stad</p>
 
-        <div class="contact-info">
-            For bookings: <a href="mailto:booking@supersafepartyband.be" style="color: inherit; text-decoration: underline;">booking@supersafepartyband.be</a>
+            <div id="showreel" class="showreel glass">
+                <div class="showreel-frame">
+                    <!-- TODO: replace this poster with the showreel embed (YouTube/Vimeo iframe or <video>) -->
+                    <img src="band.jpg" alt="">
+                    <div class="showreel-overlay">
+                        <button type="button" class="btn btn-yellow play" aria-label="Speel de showreel af">
+                            <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"></path></svg>
+                        </button>
+                        <div class="showreel-title display">Bekijk de showreel</div>
+                        <div class="showreel-note">[SHOWREELVIDEO — YouTube/Vimeo-embed of MP4]</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-row">
+                <a href="#contact" class="btn btn-white btn-lg">Boek SuperSafe voor jouw feest</a>
+                <a href="https://www.instagram.com/supersafepartyband/" class="btn glass btn-lg">Volg ons op Instagram</a>
+            </div>
+        </section>
+
+        <section id="band">
+            <div class="band-card glass container">
+                <img src="band.jpg" alt="De vijf leden van SuperSafe op het podium in gele en blauwe salopettes, met bas, gitaar en drums" class="band-photo">
+                <div class="band-text">
+                    <div class="eyebrow">De band</div>
+                    <h2 class="display">Helm op.<br>Dansvloer vol.</h2>
+                    <p class="lead">SuperSafe is een party- en coverband die de nummers speelt die iedereen kent — luid, strak en met een knipoog. [EEN OF TWEE ZINNEN OVER JULLIE SET, BEZETTING EN HET SOORT FEESTEN WAAR JULLIE SPELEN]</p>
+                    <div class="tags">
+                        <span class="tag tag-yellow">Huwelijken</span>
+                        <span class="tag tag-blue">Bedrijfsfeesten</span>
+                        <span class="tag tag-pink">Privéfeesten</span>
+                        <span class="tag tag-white">Festivals</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="contact-grid container">
+
+                <div class="contact-card glass">
+                    <div class="eyebrow">Boekingen</div>
+                    <h2 class="display">Wij maken jouw feest SuperSafe.</h2>
+                    <p class="lead">Vertel ons over je feest, dan laten we je snel weten of we vrij zijn en sturen we je een voorstel.</p>
+
+                    <a href="mailto:booking@supersafepartyband.be" class="link-tile">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>
+                        booking@supersafepartyband.be
+                    </a>
+
+                    <div class="socials-block">
+                        <div class="socials-label">Volg de glam</div>
+                        <div class="socials">
+                            <a href="https://www.instagram.com/supersafepartyband/" class="link-tile">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"></circle></svg>
+                                Instagram
+                            </a>
+                            <a href="https://www.facebook.com/SuperSafePartyBand" class="link-tile">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h-2.5A3.5 3.5 0 0 0 9 6.5V10H6.5v3.5H9V21h3.5v-7.5H15l.5-3.5h-3V7a1 1 0 0 1 1-1H15z"></path></svg>
+                                Facebook
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="booking-form" class="glass">
+                    <div class="field">
+                        <label for="ss-name">Naam</label>
+                        <input id="ss-name" name="name" type="text" placeholder="Je naam" autocomplete="name" required>
+                    </div>
+                    <div class="field">
+                        <label for="ss-email">E-mail</label>
+                        <input id="ss-email" name="email" type="email" placeholder="jij@voorbeeld.be" autocomplete="email" required>
+                    </div>
+                    <div class="field">
+                        <label for="ss-date">Datum van het feest</label>
+                        <input id="ss-date" name="date" type="date">
+                    </div>
+                    <div class="field">
+                        <label for="ss-type">Soort feest</label>
+                        <select id="ss-type" name="type">
+                            <option>Huwelijk</option>
+                            <option>Bedrijfsfeest</option>
+                            <option>Privéfeest</option>
+                            <option>Festival</option>
+                            <option>Iets anders</option>
+                        </select>
+                    </div>
+                    <div class="field field-wide">
+                        <label for="ss-location">Locatie</label>
+                        <input id="ss-location" name="location" type="text" placeholder="Gemeente of zaal">
+                    </div>
+                    <div class="field field-wide">
+                        <label for="ss-msg">Vertel ons over je feest</label>
+                        <textarea id="ss-msg" name="message" rows="5" placeholder="Aantal gasten, timing, nummers die zeker niet mogen ontbreken…"></textarea>
+                    </div>
+                    <div class="form-footer">
+                        <span>We antwoorden meestal binnen enkele dagen.</span>
+                        <button type="submit" class="btn btn-yellow">Verstuur aanvraag</button>
+                    </div>
+                </form>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-bar glass container">
+            <span class="display">SuperSafe Partyband</span>
+            <span>© 2026 SuperSafe Partyband · <a href="mailto:booking@supersafepartyband.be">booking@supersafepartyband.be</a></span>
         </div>
-    </div>
+    </footer>
+
+    <script>
+        // GitHub Pages has no backend, so the booking form opens a prefilled email instead.
+        document.getElementById('booking-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const data = new FormData(event.target);
+            const subject = 'Boekingsaanvraag: ' + data.get('type') + (data.get('date') ? ' op ' + data.get('date') : '');
+            const body = [
+                'Naam: ' + data.get('name'),
+                'E-mail: ' + data.get('email'),
+                'Datum: ' + (data.get('date') || '-'),
+                'Soort feest: ' + data.get('type'),
+                'Locatie: ' + (data.get('location') || '-'),
+                '',
+                data.get('message')
+            ].join('\n');
+            window.location.href = 'mailto:booking@supersafepartyband.be'
+                + '?subject=' + encodeURIComponent(subject)
+                + '&body=' + encodeURIComponent(body);
+        });
+    </script>
 
 </body>
 </html>
