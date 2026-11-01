@@ -432,6 +432,23 @@
             min-height: 52px;
         }
 
+        .form-footer .btn:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .form-status {
+            grid-column: 1 / -1;
+            margin: 0;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+        }
+
+        .form-status.error { border-color: var(--yellow); }
+
         /* Footer */
         footer {
             margin-top: auto;
@@ -576,7 +593,10 @@
                     </div>
                 </div>
 
-                <form id="booking-form" class="glass">
+                <form id="booking-form" class="glass" action="https://api.web3forms.com/submit" method="POST">
+                    <input type="hidden" name="access_key" value="889b48b5-d7af-4ca4-88e7-d2efd853be19">
+                    <input type="hidden" name="from_name" value="SuperSafe website">
+                    <input type="hidden" name="subject" value="Nieuwe boekingsaanvraag">
                     <div class="field">
                         <label for="ss-name">Naam</label>
                         <input id="ss-name" name="name" type="text" placeholder="Je naam" autocomplete="name" required>
@@ -587,11 +607,11 @@
                     </div>
                     <div class="field">
                         <label for="ss-date">Datum van het feest</label>
-                        <input id="ss-date" name="date" type="date">
+                        <input id="ss-date" name="Datum" type="date">
                     </div>
                     <div class="field">
                         <label for="ss-type">Soort feest</label>
-                        <select id="ss-type" name="type">
+                        <select id="ss-type" name="Soort feest">
                             <option>Huwelijk</option>
                             <option>Bedrijfsfeest</option>
                             <option>Privéfeest</option>
@@ -601,16 +621,17 @@
                     </div>
                     <div class="field field-wide">
                         <label for="ss-location">Locatie</label>
-                        <input id="ss-location" name="location" type="text" placeholder="Gemeente of zaal">
+                        <input id="ss-location" name="Locatie" type="text" placeholder="Gemeente of zaal">
                     </div>
                     <div class="field field-wide">
                         <label for="ss-msg">Vertel ons over je feest</label>
-                        <textarea id="ss-msg" name="message" rows="5" placeholder="Aantal gasten, timing, nummers die zeker niet mogen ontbreken…"></textarea>
+                        <textarea id="ss-msg" name="message" rows="5" placeholder="Aantal gasten, timing, nummers die zeker niet mogen ontbreken…" required></textarea>
                     </div>
                     <div class="form-footer">
                         <span>We antwoorden meestal binnen enkele dagen.</span>
                         <button type="submit" class="btn btn-yellow">Verstuur aanvraag</button>
                     </div>
+                    <p id="form-status" class="form-status" role="status" hidden></p>
                 </form>
 
             </div>
@@ -637,23 +658,38 @@
             iframe.focus();
         });
 
-        // GitHub Pages has no backend, so the booking form opens a prefilled email instead.
-        document.getElementById('booking-form').addEventListener('submit', function (event) {
+        // Web3Forms emails each enquiry to the booking address, without JavaScript the form posts to it directly.
+        document.getElementById('booking-form').addEventListener('submit', async function (event) {
             event.preventDefault();
-            const data = new FormData(event.target);
-            const subject = 'Boekingsaanvraag: ' + data.get('type') + (data.get('date') ? ' op ' + data.get('date') : '');
-            const body = [
-                'Naam: ' + data.get('name'),
-                'E-mail: ' + data.get('email'),
-                'Datum: ' + (data.get('date') || '-'),
-                'Soort feest: ' + data.get('type'),
-                'Locatie: ' + (data.get('location') || '-'),
-                '',
-                data.get('message')
-            ].join('\n');
-            window.location.href = 'mailto:booking@supersafepartyband.be'
-                + '?subject=' + encodeURIComponent(subject)
-                + '&body=' + encodeURIComponent(body);
+            const form = event.target;
+            const button = form.querySelector('button[type="submit"]');
+            const status = document.getElementById('form-status');
+            const data = Object.fromEntries(new FormData(form));
+            data.subject = 'Boekingsaanvraag: ' + data['Soort feest'] + (data['Datum'] ? ' op ' + data['Datum'] : '');
+
+            button.disabled = true;
+            status.hidden = false;
+            status.classList.remove('error');
+            status.textContent = 'Bezig met versturen…';
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) {
+                    throw new Error('Web3Forms responded with ' + response.status);
+                }
+                form.reset();
+                status.textContent = 'Bedankt! We hebben je aanvraag ontvangen en laten snel iets weten.';
+            } catch (error) {
+                console.error(error);
+                status.classList.add('error');
+                status.textContent = 'Er ging iets mis bij het versturen. Probeer het opnieuw of mail ons op booking@supersafepartyband.be.';
+            } finally {
+                button.disabled = false;
+            }
         });
     </script>
 
