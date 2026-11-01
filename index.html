@@ -185,6 +185,14 @@
             opacity: 0.55;
         }
 
+        .showreel-frame iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
         .showreel-overlay {
             position: absolute;
             inset: 0;
@@ -212,11 +220,6 @@
         .showreel-title {
             font-size: 28px;
             letter-spacing: 0.04em;
-        }
-
-        .showreel-note {
-            font-size: 14px;
-            opacity: 0.85;
         }
 
         .cta-row {
@@ -471,7 +474,6 @@
             .play { width: 72px; height: 72px; }
             .play svg { width: 28px; height: 28px; }
             .showreel-title { font-size: 20px; }
-            .showreel-note { display: none; }
             #band, #contact { padding-top: 48px; padding-bottom: 48px; }
         }
 
@@ -504,14 +506,12 @@
         <section id="top">
             <div id="showreel" class="showreel glass">
                 <div class="showreel-frame">
-                    <!-- TODO: replace this poster with the showreel embed (YouTube/Vimeo iframe or <video>) -->
                     <img src="band.jpg" alt="">
                     <div class="showreel-overlay">
-                        <button type="button" class="btn btn-yellow play" aria-label="Speel de showreel af">
+                        <a id="showreel-play" href="https://www.youtube.com/watch?v=CkGmgPdOzuU" class="btn btn-yellow play" aria-label="Speel de showreel af">
                             <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"></path></svg>
-                        </button>
+                        </a>
                         <div class="showreel-title display">Bekijk de showreel</div>
-                        <div class="showreel-note">[SHOWREELVIDEO — YouTube/Vimeo-embed of MP4]</div>
                     </div>
                 </div>
             </div>
@@ -616,6 +616,18 @@
     </footer>
 
     <script>
+        // Only load YouTube once a visitor presses play, the link is the fallback without JavaScript.
+        document.getElementById('showreel-play').addEventListener('click', function (event) {
+            event.preventDefault();
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://www.youtube-nocookie.com/embed/CkGmgPdOzuU?autoplay=1&rel=0';
+            iframe.title = 'Showreel van SuperSafe Partyband';
+            iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+            iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+            document.querySelector('.showreel-frame').replaceChildren(iframe);
+            iframe.focus();
+        });
+
         // GitHub Pages has no backend, so the booking form opens a prefilled email instead.
         document.getElementById('booking-form').addEventListener('submit', function (event) {
             event.preventDefault();
