@@ -1,0 +1,12 @@
+# Everything in the repo is published except what is listed here.
+.git
+.github
+.gitignore
+.assetsignore
+wrangler.jsonc
+public
+.wrangler
+index_old.html
+carlton.webp
+logo_with_text.png
+logo_narrow.png
